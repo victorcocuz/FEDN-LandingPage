@@ -50,57 +50,7 @@ function buildNavigationMenu() {
 }
 
 // Add class 'active' to section when near top of viewport
-
-
-// Scroll to anchor ID using scrollTO event
-
-
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
-
-// Build menu 
-buildNavigationMenu();
-
-// Scroll to section on link click
-navigationList.addEventListener('click', scrollToSection)
-
-function scrollToSection(event) {
-    sectionTitle = event.target.textContent;
-    
-    for (const section of sections) {
-        if (sectionTitle == section.querySelector('h2').textContent) {
-            const windowWidthInRem = window.innerWidth / remFactor;
-            
-            let yOffset = 0;
-            if (windowWidthInRem <= 35) {
-                yOffset = 9 * remFactor; 
-                console.log('small' + yOffset);
-            } 
-            const y = section.getBoundingClientRect().top + window.pageYOffset - yOffset;
-            window.scrollTo({top: y, behavior: 'smooth'});
-        }
-    }
-}
-
-// Hide/show header on scroll
-window.onscroll = function(e) { 
-    const header = document.querySelector('header');
-    let scrollY = window.pageYOffset || document.documentElement.scrollTop;
-    let height = -header.clientHeight;
-    header.style.transition = 'transform 0.1s';
-
-    scrollY <= this.lastScroll 
-    ? header.style.transform = 'translateY(0px)'
-    : header.style.transform = 'translateY(' + height + 'px)'
-
-    this.lastScroll = scrollY ;
-}
-
-// Add class to highlight the active section and the active menu item
-window.onscroll = function(e) {
+function highlightActiveSection() {
     let sectionIndex = 0;
     let minDistance = 10000;
     for (let i = 0; i < sections.length; i++) {
@@ -120,4 +70,55 @@ window.onscroll = function(e) {
             navigationList.querySelectorAll('li')[i].classList.remove('highlighted-menu-item');
         }
     }
+}
+
+// Show/hide navigation
+function showHideNavigation() {
+    const header = document.querySelector('header');
+    let scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    let height = -header.clientHeight;
+    header.style.transition = 'transform 0.1s';
+
+    scrollY <= this.lastScroll 
+    ? header.style.transform = 'translateY(0px)'
+    : header.style.transform = 'translateY(' + height + 'px)'
+
+    this.lastScroll = scrollY ;
+}
+
+// Scroll to anchor ID using scrollTO event
+function scrollToSection(event) {
+    sectionTitle = event.target.textContent;
+    
+    for (const section of sections) {
+        if (sectionTitle == section.querySelector('h2').textContent) {
+            const windowWidthInRem = window.innerWidth / remFactor;
+            
+            let yOffset = 0;
+            if (windowWidthInRem <= 35) {
+                yOffset = 9 * remFactor; 
+                console.log('small' + yOffset);
+            } 
+            const y = section.getBoundingClientRect().top + window.pageYOffset - yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+        }
+    }
+}
+
+/**
+ * End Main Functions
+ * Begin Events
+ * 
+*/
+
+// Build menu 
+buildNavigationMenu();
+
+// Scroll to section on link click
+navigationList.addEventListener('click', scrollToSection)
+
+// Add class to highlight the active section and the active menu item and to show/hide the navigation
+window.onscroll = function(e) {
+    this.highlightActiveSection();
+    this.showHideNavigation();
 }
